@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">ErgoGuard</string>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Side Profile Photo</string>
+    <string name="onboarding_desc_1">Place phone steady or ask someone to take a photo from the side. Ensure ear and shoulder are visible.</string>
+    <string name="onboarding_title_2">View Analysis Results</string>
+    <string name="onboarding_desc_2">AI will calculate head protrusion and let you know how many kg of load your neck is bearing.</string>
+    <string name="onboarding_title_3">30-Second Exercise</string>
+    <string name="onboarding_desc_3">Perform Chin Tucks as guided, retake photo and see improvement instantly!</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_start">Start</string>
+    <string name="btn_skip">Skip</string>
+
+    <!-- Camera -->
+    <string name="camera_preview_debug">Camera Preview</string>
+    <string name="cd_switch_camera">Switch Camera</string>
+    <string name="mode_side">Side</string>
+    <string name="mode_front">Front</string>
+    <string name="cd_history">History</string>
+    <string name="guide_side">Stand sideways\nEnsure ear and shoulder visible</string>
+    <string name="guide_front">Stand facing camera\nEnsure both shoulders visible</string>
+    <string name="timer_off">Off</string>
+    <string name="cd_pick_photo">Pick Photo</string>
+    <string name="cd_timer">Timer</string>
+
+    <!-- Permission -->
+    <string name="permission_title">Camera Permission Required</string>
+    <string name="permission_desc">To analyze posture, the app needs camera access</string>
+    <string name="btn_grant_permission">Grant Permission</string>
+
+    <!-- Result -->
+    <string name="result_neck_load">Neck Load</string>
+    <string name="result_exercise_title">💪 30s Exercise</string>
+    <string name="btn_start_over">Start Over</string>
+    <string name="btn_retake">Retake</string>
+    <string name="btn_compare">Compare</string>
+
+    <!-- History -->
+    <string name="history_title">Analysis History</string>
+    <string name="cd_back">Back</string>
+    <string name="history_empty_title">No history yet</string>
+    <string name="history_empty_desc">Take a photo to start analyzing posture</string>
+    <string name="status_safe">Safe</string>
+    <string name="status_warning_mild">Mild Warning</string>
+    <string name="status_warning_severe">Severe Warning</string>
+    <string name="history_load_prefix">Load: ~</string>
+
+    <!-- Error -->
+    <string name="btn_retry">Retry</string>
+    
+    <!-- Main -->
+    <string name="analyzing_posture">Analyzing posture...</string>
 </resources>

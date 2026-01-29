@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  ErgoGuard - Vietnamese
+*/
+
+"NSCameraUsageDescription" = "ErgoGuard cần quyền truy cập Camera để chụp ảnh và phân tích tư thế cổ của bạn.";
+"NSPhotoLibraryUsageDescription" = "ErgoGuard cần quyền truy cập Thư viện ảnh để bạn có thể chọn ảnh có sẵn để phân tích.";
+"CFBundleDisplayName" = "ErgoGuard";
+"CFBundleName" = "ErgoGuard";

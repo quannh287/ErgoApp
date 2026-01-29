@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  ErgoGuard - Vietnamese
+*/
+
+// Common
+"mode_side" = "Nghiêng";
+"mode_front" = "Trực diện";
+"camera_preview" = "Camera Preview";
+"timer_off" = "Tắt";
+
+// Onboarding
+"onboard_skip" = "Bỏ qua";
+"onboard_next" = "Tiếp tục";
+"onboard_start" = "Bắt đầu";
+"onboard_back" = "Quay lại";
+"onboard_1_title" = "Chụp ảnh góc nghiêng";
+"onboard_1_desc" = "Đặt điện thoại cố định hoặc nhờ người khác chụp ảnh bạn từ bên hông. Đảm bảo thấy rõ tai và vai.";
+"onboard_2_title" = "Xem kết quả phân tích";
+"onboard_2_desc" = "AI sẽ tính toán độ nhô đầu và cho bạn biết cổ đang gánh bao nhiêu kg áp lực.";
+"onboard_3_title" = "Làm bài tập 30 giây";
+"onboard_3_desc" = "Thực hiện bài tập Chin Tuck theo hướng dẫn, chụp lại và thấy ngay sự cải thiện!";
+
+// Camera
+"guide_side" = "Đứng nghiêng\nĐảm bảo thấy rõ tai và vai";
+"guide_front" = "Đứng đối diện\nĐảm bảo thấy rõ cả 2 vai";
+
+// Result
+"result_safe" = "An toàn";
+"result_warning" = "Quá tải nhẹ";
+"result_danger" = "Quá tải nghiêm trọng";
+"neck_load_title" = "Áp lực lên cổ";
+"exercise_title" = "Bài tập 30 giây";
+"btn_retake" = "Chụp lại";
+"btn_compare" = "So sánh tiếp";
+"btn_reset" = "Làm lại từ đầu";
+
+// History
+"history_title" = "Lịch sử phân tích";
+"history_empty_title" = "Chưa có lịch sử";
+"history_empty_desc" = "Chụp ảnh để bắt đầu phân tích tư thế";
+"pressure_label" = "Áp lực: ~%d kg";
+
+// Permission
+"perm_title" = "Cần quyền Camera";
+"perm_desc" = "Để phân tích tư thế, ứng dụng cần quyền truy cập camera";
+"perm_btn" = "Cấp quyền";
+
+// Analysis
+"analysis_good" = "Tư thế tốt! Tiếp tục duy trì như vậy.";
+"analysis_warning" = "Cơ cổ đang phải gánh gấp đôi trọng lượng đầu.";
+"analysis_danger" = "Áp lực cổ nghiêm trọng! Cần điều chỉnh tư thế ngay.";
+"fix_action" = "Thực hiện bài tập Chin Tuck: Giữ đầu thẳng, dùng ngón tay đẩy nhẹ cằm về phía sau. Giữ 10 giây, lặp lại 3 lần.";
+"compare_improved" = "Tuyệt vời! Bạn đã cải thiện %d%% so với lần trước!";
+"compare_worsened" = "Cảnh báo: Tư thế của bạn tệ hơn %d%% so với lần trước.";

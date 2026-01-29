@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  ErgoGuard - English
+*/
+
+// Common
+"mode_side" = "Side";
+"mode_front" = "Front";
+"camera_preview" = "Camera Preview";
+"timer_off" = "Off";
+
+// Onboarding
+"onboard_skip" = "Skip";
+"onboard_next" = "Next";
+"onboard_start" = "Start";
+"onboard_back" = "Back";
+"onboard_1_title" = "Capture Side View";
+"onboard_1_desc" = "Place phone steadily or ask someone to take a photo from the side. Ensure ear and shoulder are visible.";
+"onboard_2_title" = "View Analysis Results";
+"onboard_2_desc" = "AI will calculate head protrusion and neck load in kg.";
+"onboard_3_title" = "30-Second Exercise";
+"onboard_3_desc" = "Follow Chin Tuck exercise guide, retake photo and see improvement!";
+
+// Camera
+"guide_side" = "Stand sideways\nEnsure ear and shoulder are visible";
+"guide_front" = "Stand facing camera\nEnsure both shoulders are visible";
+
+// Result
+"result_safe" = "Normal";
+"result_warning" = "Warning";
+"result_danger" = "Danger";
+"neck_load_title" = "Neck Load";
+"exercise_title" = "30s Exercise";
+"btn_retake" = "Retake";
+"btn_compare" = "Compare";
+"btn_reset" = "Reset";
+
+// History
+"history_title" = "History";
+"history_empty_title" = "No History";
+"history_empty_desc" = "Take a photo to start analysis";
+"pressure_label" = "Load: ~%d kg";
+
+// Permission
+"perm_title" = "Camera Permission Needed";
+"perm_desc" = "App needs camera access to analyze posture";
+"perm_btn" = "Grant Permission";
+
+// Analysis
+"analysis_good" = "Good posture! Keep it up.";
+"analysis_warning" = "Neck muscles are bearing double the head weight.";
+"analysis_danger" = "Severe neck load! Adjust posture immediately.";
+"fix_action" = "Do Chin Tuck: Keep head straight, gently push chin back with fingers. Hold 10s, repeat 3 times.";
+"compare_improved" = "Great! You improved %d%% from last time!";
+"compare_worsened" = "Warning: Your posture worsened by %d%%.";

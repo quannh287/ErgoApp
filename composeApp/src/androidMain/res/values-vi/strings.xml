@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">ErgoGuard</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Chụp ảnh góc nghiêng</string>
+    <string name="onboarding_desc_1">Đặt điện thoại cố định hoặc nhờ người khác chụp ảnh bạn từ bên hông. Đảm bảo thấy rõ tai và vai.</string>
+    <string name="onboarding_title_2">Xem kết quả phân tích</string>
+    <string name="onboarding_desc_2">AI sẽ tính toán độ nhô đầu và cho bạn biết cổ đang gánh bao nhiêu kg áp lực.</string>
+    <string name="onboarding_title_3">Làm bài tập 30 giây</string>
+    <string name="onboarding_desc_3">Thực hiện bài tập Chin Tuck theo hướng dẫn, chụp lại và thấy ngay sự cải thiện!</string>
+    <string name="btn_back">Quay lại</string>
+    <string name="btn_continue">Tiếp tục</string>
+    <string name="btn_start">Bắt đầu</string>
+    <string name="btn_skip">Bỏ qua</string>
+
+    <!-- Camera -->
+    <string name="camera_preview_debug">Camera Preview</string>
+    <string name="cd_switch_camera">Đổi camera</string>
+    <string name="mode_side">Nghiêng</string>
+    <string name="mode_front">Trực diện</string>
+    <string name="cd_history">Lịch sử</string>
+    <string name="guide_side">Đứng nghiêng\nĐảm bảo thấy rõ tai và vai</string>
+    <string name="guide_front">Đứng đối diện\nĐảm bảo thấy rõ cả 2 vai</string>
+    <string name="timer_off">Tắt</string>
+    <string name="cd_pick_photo">Chọn ảnh</string>
+    <string name="cd_timer">Hẹn giờ</string>
+
+    <!-- Permission -->
+    <string name="permission_title">Cần quyền Camera</string>
+    <string name="permission_desc">Để phân tích tư thế, ứng dụng cần quyền truy cập camera</string>
+    <string name="btn_grant_permission">Cấp quyền</string>
+
+    <!-- Result -->
+    <string name="result_neck_load">Áp lực lên cổ</string>
+    <string name="result_exercise_title">💪 Bài tập 30 giây</string>
+    <string name="btn_start_over">Làm lại từ đầu</string>
+    <string name="btn_retake">Chụp lại</string>
+    <string name="btn_compare">So sánh tiếp</string>
+
+    <!-- History -->
+    <string name="history_title">Lịch sử phân tích</string>
+    <string name="cd_back">Quay lại</string>
+    <string name="history_empty_title">Chưa có lịch sử</string>
+    <string name="history_empty_desc">Chụp ảnh để bắt đầu phân tích tư thế</string>
+    <string name="status_safe">An toàn</string>
+    <string name="status_warning_mild">Quá tải nhẹ</string>
+    <string name="status_warning_severe">Quá tải nghiêm trọng</string>
+    <string name="history_load_prefix">Áp lực: ~</string>
+
+    <!-- Error -->
+    <string name="btn_retry">Thử lại</string>
+
+    <!-- Main -->
+    <string name="analyzing_posture">Đang phân tích tư thế...</string>
+</resources>

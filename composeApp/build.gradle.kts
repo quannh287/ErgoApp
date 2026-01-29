@@ -23,6 +23,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
+            implementation(libs.androidx.navigation.compose)
 
             // CameraX
             implementation(libs.camerax.core)

@@ -1,203 +1,124 @@
-# Design System Master File
+# Design System Master File — ErgoGuard
 
-> **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
-> If that file exists, its rules **override** this Master file.
-> If not, strictly follow the rules below.
-
----
-
-**Project:** ErgoGuard
-**Generated:** 2026-01-29 10:51:02
-**Category:** SaaS (General)
+> **Logic:** When building a specific screen, first check `design-system/ergoguard/pages/[screen-name].md`.
+> If that file exists, its rules **override** this Master. Otherwise use this file only.
+> **Cross-platform:** Android (Jetpack Compose) and iOS (SwiftUI) MUST use the same palette, typography scale, and spacing tokens below.
 
 ---
 
-## Global Rules
+## 1. Color Palette (Single Source of Truth)
 
-### Color Palette
+Both platforms MUST use these hex values. Android: `Color.kt` + `MaterialTheme.colorScheme`. iOS: `ErgoGuardColors` / `ErgoGuardColors.Dark` (no raw `Color(hex:)` in screens).
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#0891B2` | `--color-primary` |
-| Secondary | `#22D3EE` | `--color-secondary` |
-| CTA/Accent | `#22C55E` | `--color-cta` |
-| Background | `#ECFEFF` | `--color-background` |
-| Text | `#164E63` | `--color-text` |
+### Light theme
 
-**Color Notes:** Fresh cyan + clean green
+| Role                     | Hex       | Android token                       | iOS token                            |
+| ------------------------ | --------- | ----------------------------------- | ------------------------------------ |
+| Primary                  | `#006874` | `md_theme_light_primary`            | `ErgoGuardColors.primary`            |
+| On Primary               | `#FFFFFF` | `md_theme_light_onPrimary`          | `ErgoGuardColors.onPrimary`          |
+| Primary Container        | `#97F0FF` | `md_theme_light_primaryContainer`   | `ErgoGuardColors.primaryContainer`   |
+| On Primary Container     | `#001F24` | `md_theme_light_onPrimaryContainer` | `ErgoGuardColors.onPrimaryContainer` |
+| Secondary                | `#4A6267` | `md_theme_light_secondary`          | `ErgoGuardColors.secondary`          |
+| Secondary Container      | `#CDE7EC` | `md_theme_light_secondaryContainer` | `ErgoGuardColors.secondaryContainer` |
+| Tertiary (CTA / success) | `#006C4C` | `md_theme_light_tertiary`           | `ErgoGuardColors.tertiary`           |
+| Tertiary Container       | `#89F8C6` | `md_theme_light_tertiaryContainer`  | `ErgoGuardColors.tertiaryContainer`  |
+| Error                    | `#BA1A1A` | `md_theme_light_error`              | `ErgoGuardColors.error`              |
+| Error Container          | `#FFDAD6` | `md_theme_light_errorContainer`     | `ErgoGuardColors.errorContainer`     |
+| Warning (severity)       | `#B98200` | hardcoded in Result/History         | `ErgoGuardColors.warning`            |
+| Background               | `#F8FDFF` | `md_theme_light_background`         | `ErgoGuardColors.background`         |
+| On Background            | `#001F25` | `md_theme_light_onBackground`       | `ErgoGuardColors.onBackground`       |
+| Surface                  | `#F8FDFF` | `md_theme_light_surface`            | `ErgoGuardColors.surface`            |
+| On Surface               | `#001F25` | `md_theme_light_onSurface`          | `ErgoGuardColors.onSurface`          |
+| Surface Variant          | `#DBE4E6` | `md_theme_light_surfaceVariant`     | `ErgoGuardColors.surfaceVariant`     |
+| On Surface Variant       | `#3F484A` | `md_theme_light_onSurfaceVariant`   | `ErgoGuardColors.onSurfaceVariant`   |
+| Outline                  | `#6F797A` | `md_theme_light_outline`            | `ErgoGuardColors.outline`            |
 
-### Typography
+### Dark theme
 
-- **Heading Font:** Archivo
-- **Body Font:** Space Grotesk
-- **Mood:** minimal, portfolio, designer, creative, clean, artistic
-- **Google Fonts:** [Archivo + Space Grotesk](https://fonts.google.com/share?selection.family=Archivo:wght@300;400;500;600;700|Space+Grotesk:wght@300;400;500;600;700)
+| Role               | Hex       | Android                           | iOS                                      |
+| ------------------ | --------- | --------------------------------- | ---------------------------------------- |
+| Primary            | `#4FD8EB` | `md_theme_dark_primary`           | `ErgoGuardColors.Dark.primary`           |
+| Background         | `#001F25` | `md_theme_dark_background`        | `ErgoGuardColors.Dark.background`        |
+| On Background      | `#A6EEFF` | `md_theme_dark_onBackground`      | `ErgoGuardColors.Dark.onBackground`      |
+| Surface            | `#001F25` | `md_theme_dark_surface`           | `ErgoGuardColors.Dark.surface`           |
+| On Surface         | `#A6EEFF` | `md_theme_dark_onSurface`         | `ErgoGuardColors.Dark.onSurface`         |
+| Surface Variant    | `#3F484A` | `md_theme_dark_surfaceVariant`    | `ErgoGuardColors.Dark.surfaceVariant`    |
+| On Surface Variant | `#BFC8CA` | `md_theme_dark_onSurfaceVariant`  | `ErgoGuardColors.Dark.onSurfaceVariant`  |
+| Tertiary           | `#6CDAB6` | `md_theme_dark_tertiary`          | `ErgoGuardColors.Dark.tertiary`          |
+| Tertiary Container | `#005138` | `md_theme_dark_tertiaryContainer` | `ErgoGuardColors.Dark.tertiaryContainer` |
 
-**CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-```
-
-### Spacing Variables
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--space-xs` | `4px` / `0.25rem` | Tight gaps |
-| `--space-sm` | `8px` / `0.5rem` | Icon gaps, inline spacing |
-| `--space-md` | `16px` / `1rem` | Standard padding |
-| `--space-lg` | `24px` / `1.5rem` | Section padding |
-| `--space-xl` | `32px` / `2rem` | Large gaps |
-| `--space-2xl` | `48px` / `3rem` | Section margins |
-| `--space-3xl` | `64px` / `4rem` | Hero padding |
-
-### Shadow Depths
-
-| Level | Value | Usage |
-|-------|-------|-------|
-| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
-| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
-| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
+**Rule:** Follow system light/dark. Android: `isSystemInDarkTheme()`. iOS: `@Environment(\.colorScheme)` and use `ErgoGuardColors` vs `ErgoGuardColors.Dark`.
 
 ---
 
-## Component Specs
+## 2. Typography scale (align Android ↔ iOS)
 
-### Buttons
+Use the same semantic roles and similar sizes. Android uses `MaterialTheme.typography`; iOS MUST use a shared scale (e.g. `ErgoGuardTypography`).
 
-```css
-/* Primary Button */
-.btn-primary {
-  background: #22C55E;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+| Role           | Android (sp) | iOS (pt) | Use for                     |
+| -------------- | ------------ | -------- | --------------------------- |
+| displayLarge   | 57           | 57       | Big numbers (e.g. % result) |
+| displayMedium  | 45           | 48       | Secondary big numbers       |
+| displaySmall   | 36           | 36       | —                           |
+| headlineLarge  | 32           | 28       | Screen titles               |
+| headlineMedium | 28           | 24       | Section titles              |
+| headlineSmall  | 24           | 22       | —                           |
+| titleLarge     | 22           | 22       | Card titles                 |
+| titleMedium    | 16           | 17       | Buttons, list titles        |
+| titleSmall     | 14           | 14       | Labels                      |
+| bodyLarge      | 16           | 17       | Body text                   |
+| bodyMedium     | 14           | 15       | Secondary body              |
+| bodySmall      | 12           | 13       | Captions                    |
+| labelLarge     | 14           | 14       | —                           |
+| labelMedium    | 12           | 12       | —                           |
+| labelSmall     | 11           | 11       | —                           |
 
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: #0891B2;
-  border: 2px solid #0891B2;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-```
-
-### Cards
-
-```css
-.card {
-  background: #ECFEFF;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-```
-
-### Inputs
-
-```css
-.input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
-}
-
-.input:focus {
-  border-color: #0891B2;
-  outline: none;
-  box-shadow: 0 0 0 3px #0891B220;
-}
-```
-
-### Modals
-
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
-}
-```
+**Rule:** No arbitrary `.font(.system(size: X))`; use tokens so both platforms stay in sync.
 
 ---
 
-## Style Guidelines
+## 3. Spacing (ui-ux-pro-max aligned)
 
-**Style:** Flat Design
+| Token    | Value | Usage                          |
+| -------- | ----- | ------------------------------ |
+| spaceXs  | 4     | Tight gaps                     |
+| spaceSm  | 8     | Icon gaps, chips               |
+| spaceMd  | 16    | Standard padding, list padding |
+| spaceLg  | 24    | Section spacing                |
+| spaceXl  | 32    | Large gaps, screen padding     |
+| space2xl | 48    | Section margins                |
+| space3xl | 64    | Hero / empty state             |
 
-**Keywords:** 2D, minimalist, bold colors, no shadows, clean lines, simple shapes, typography-focused, modern, icon-heavy
-
-**Best For:** Web apps, mobile apps, cross-platform, startup MVPs, user-friendly, SaaS, dashboards, corporate
-
-**Key Effects:** No gradients/shadows, simple hover (color/opacity shift), fast loading, clean transitions (150-200ms ease), minimal icons
-
-### Page Pattern
-
-**Pattern Name:** Minimal Single Column
-
-- **Conversion Strategy:** Single CTA focus. Large typography. Lots of whitespace. No nav clutter. Mobile-first.
-- **CTA Placement:** Center, large CTA button
-- **Section Order:** 1. Hero headline, 2. Short description, 3. Benefit bullets (3 max), 4. CTA, 5. Footer
+**Android:** Prefer `x.dp` with these values (e.g. `16.dp`, `24.dp`).
+**iOS:** Prefer same values in points (e.g. `16`, `24`).
 
 ---
 
-## Anti-Patterns (Do NOT Use)
+## 4. Component rules (both platforms)
 
-- ❌ Excessive animation
-- ❌ Dark mode by default
-
-### Additional Forbidden Patterns
-
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
-- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
-- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
-- ❌ **Invisible focus states** — Focus states must be visible for a11y
+- **Buttons:** Primary = tertiary (green) or primary (cyan) per design. Padding vertical ~12–14, horizontal ~20–24. Corner radius 8–12. Transitions 150–300 ms.
+- **Cards:** Background = surface or surfaceVariant. Corner radius 12–16. Elevation/shadow: subtle (Android `2.dp` / iOS equivalent). Padding 16–24.
+- **Icons:** One icon set only (Material Icons Android, SF Symbols iOS). No emoji as icons.
+- **Camera screen:** Status bar transparent; overlay controls may use black/white for contrast. Other screens: status bar color = background; follow system light/dark.
 
 ---
 
-## Pre-Delivery Checklist
+## 5. Pre-delivery checklist (ui-ux-pro-max)
 
-Before delivering any UI code, verify:
+- [ ] No emojis as icons (use SVG / SF Symbols / Material Icons).
+- [ ] All interactive elements have clear tap/hover feedback.
+- [ ] Transitions 150–300 ms.
+- [ ] Light mode: text contrast ≥ 4.5:1.
+- [ ] Focus states visible for a11y.
+- [ ] Respect `prefers-reduced-motion` where applicable.
+- [ ] Android & iOS use **theme tokens only** (no raw hex in screens except camera overlay).
+- [ ] Typography uses **scale tokens** on both platforms.
 
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
-- [ ] `cursor-pointer` on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard navigation
-- [ ] `prefers-reduced-motion` respected
-- [ ] Responsive: 375px, 768px, 1024px, 1440px
-- [ ] No content hidden behind fixed navbars
-- [ ] No horizontal scroll on mobile
+---
+
+## 6. Anti-patterns (do not use)
+
+- Raw hex in screen UI (use `MaterialTheme.colorScheme` / `ErgoGuardColors`).
+- Arbitrary font sizes (use typography scale).
+- Emoji as icons.
+- Missing status bar handling (transparent for camera; background for others; follow system dark/light).

@@ -7,60 +7,54 @@ struct ResultScreen: View {
     let isFirstCapture: Bool
     let onRetakeClick: () -> Void
     let onResetClick: () -> Void
-    
+
     @Environment(\.colorScheme) var colorScheme
-    
+
     private var backgroundColor: Color {
-        colorScheme == .dark
-            ? Color(hex: "001F25")
-            : Color(hex: "F8FDFF")
+        colorScheme == .dark ? ErgoGuardColors.Dark.background : ErgoGuardColors.background
     }
-    
+
     private var textColor: Color {
-        colorScheme == .dark
-            ? Color(hex: "A6EEFF")
-            : Color(hex: "001F25")
+        colorScheme == .dark ? ErgoGuardColors.Dark.onBackground : ErgoGuardColors.onBackground
     }
-    
+
     private var surfaceColor: Color {
-        colorScheme == .dark
-            ? Color(hex: "334B4F")
-            : Color(hex: "DBE4E6")
+        colorScheme == .dark ? ErgoGuardColors.Dark.surfaceVariant : ErgoGuardColors.surfaceVariant
     }
-    
+
     var body: some View {
         ZStack {
             backgroundColor
                 .ignoresSafeArea()
-            
+
             ScrollView {
                 VStack(spacing: 24) {
                     Spacer()
                         .frame(height: 32)
-                    
+
                     // Main percentage display
                     percentageDisplay
-                    
+
                     // Neck load card
                     neckLoadCard
-                    
+
                     // Message
                     messageSection
-                    
+
                     // Comparison result
                     if let comparison = comparison {
                         comparisonCard(comparison)
                     }
-                    
+
                     // Fix action card
                     fixActionCard
-                    
+
                     Spacer()
                         .frame(height: 24)
-                    
+
                     // Action buttons
                     actionButtons
-                    
+
                     Spacer()
                         .frame(height: 16)
                 }
@@ -68,30 +62,30 @@ struct ResultScreen: View {
             }
         }
     }
-    
+
     // MARK: - Percentage Display
     private var percentageDisplay: some View {
         VStack(spacing: 8) {
             Text("\(Int(result.protrusionPercentage))%")
-                .font(.system(size: 72, weight: .bold, design: .rounded))
+                .font(ErgoGuardTypography.displayMedium)
                 .foregroundColor(result.level.color)
-            
+
             Text(result.level.label)
-                .font(.system(size: 24, weight: .semibold))
+                .font(ErgoGuardTypography.headlineMedium)
                 .foregroundColor(result.level.color)
         }
     }
-    
+
     // MARK: - Neck Load Card
     private var neckLoadCard: some View {
         LiquidGlassCard(cornerRadius: 16) {
             VStack(spacing: 8) {
                 Text("neck_load_title")
-                    .font(.system(size: 17, weight: .medium))
+                    .font(ErgoGuardTypography.titleMedium)
                     .foregroundColor(textColor.opacity(0.8))
-                
+
                 Text("~\(Int(result.neckLoadKg)) kg")
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .font(ErgoGuardTypography.displayMedium)
                     .foregroundColor(result.level.color)
             }
             .frame(maxWidth: .infinity)
@@ -103,22 +97,22 @@ struct ResultScreen: View {
                 .fill(surfaceColor.opacity(0.5))
         )
     }
-    
+
     // MARK: - Message Section
     private var messageSection: some View {
         Text(result.message)
-            .font(.system(size: 17))
+            .font(ErgoGuardTypography.bodyLarge)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 16)
     }
-    
+
     // MARK: - Comparison Card
     private func comparisonCard(_ comparison: ComparisonResult) -> some View {
         LiquidGlassCard(cornerRadius: 12) {
             Text(comparison.improvementMessage)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(comparison.isImproved ? Color(hex: "006C4C") : Color(hex: "BA1A1A"))
+                .font(ErgoGuardTypography.titleMedium)
+                .foregroundColor(comparison.isImproved ? ErgoGuardColors.tertiary : ErgoGuardColors.error)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(16)
@@ -126,26 +120,27 @@ struct ResultScreen: View {
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(comparison.isImproved
-                      ? Color(hex: "89F8C6").opacity(0.3)
-                      : Color(hex: "FFDAD6").opacity(0.3))
+                      ? ErgoGuardColors.tertiaryContainer.opacity(0.3)
+                      : ErgoGuardColors.errorContainer.opacity(0.3))
         )
     }
-    
+
     // MARK: - Fix Action Card
     private var fixActionCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 Image(systemName: "figure.strengthtraining.traditional")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(Color(hex: "006C4C"))
-                
+                    .font(ErgoGuardTypography.titleMedium)
+                    .foregroundColor(ErgoGuardColors.tertiary)
+
                 Text("exercise_title")
-                    .font(.system(size: 17, weight: .bold))
+                    .font(ErgoGuardTypography.bodyLarge)
+                    .fontWeight(.bold)
                     .foregroundColor(textColor)
             }
-            
+
             Text(result.fixAction)
-                .font(.system(size: 15))
+                .font(ErgoGuardTypography.bodyMedium)
                 .foregroundColor(textColor.opacity(0.8))
                 .lineSpacing(4)
         }
@@ -153,14 +148,14 @@ struct ResultScreen: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(hex: "CDE7EC").opacity(colorScheme == .dark ? 0.2 : 0.5))
+                .fill(ErgoGuardColors.secondaryContainer.opacity(colorScheme == .dark ? 0.2 : 0.5))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(hex: "CDE7EC").opacity(0.3), lineWidth: 1)
+                .stroke(ErgoGuardColors.secondaryContainer.opacity(0.3), lineWidth: 1)
         )
     }
-    
+
     // MARK: - Action Buttons
     private var actionButtons: some View {
         HStack(spacing: 16) {
@@ -169,7 +164,7 @@ struct ResultScreen: View {
                 action: onResetClick,
                 isPrimary: false
             )
-            
+
             GlassButton(
                 title: isFirstCapture ? "btn_retake" : "btn_compare",
                 action: onRetakeClick
@@ -197,7 +192,7 @@ struct ResultScreen_Previews: PreviewProvider {
                 onResetClick: {}
             )
             .preferredColorScheme(.light)
-            
+
             ResultScreen(
                 result: AnalysisResult(
                     protrusionPercentage: 45,

@@ -3,9 +3,9 @@ import SwiftUI
 // MARK: - Onboarding Screen
 struct OnboardingScreen: View {
     let onComplete: () -> Void
-    
+
     @State private var currentPage = 0
-    
+
     private let pages: [OnboardingPage] = [
         OnboardingPage(
             icon: "camera.fill",
@@ -23,19 +23,19 @@ struct OnboardingScreen: View {
             description: "onboard_3_desc"
         )
     ]
-    
+
     var body: some View {
         ZStack {
             // Background
             AnimatedGradientBackground()
-            
+
             VStack(spacing: 0) {
                 // Skip button
                 HStack {
                     Spacer()
                     Button(action: onComplete) {
                         Text("onboard_skip")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(ErgoGuardTypography.titleMedium)
                             .foregroundColor(.white.opacity(0.8))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
@@ -43,9 +43,9 @@ struct OnboardingScreen: View {
                 }
                 .padding(.top, 16)
                 .padding(.horizontal, 16)
-                
+
                 Spacer()
-                
+
                 // Page content
                 TabView(selection: $currentPage) {
                     ForEach(pages.indices, id: \.self) { index in
@@ -55,9 +55,9 @@ struct OnboardingScreen: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 .animation(.easeInOut, value: currentPage)
-                
+
                 Spacer()
-                
+
                 // Page indicators
                 HStack(spacing: 8) {
                     ForEach(pages.indices, id: \.self) { index in
@@ -68,7 +68,7 @@ struct OnboardingScreen: View {
                     }
                 }
                 .padding(.bottom, 24)
-                
+
                 // Navigation buttons
                 HStack(spacing: 16) {
                     if currentPage > 0 {
@@ -81,7 +81,7 @@ struct OnboardingScreen: View {
                         Spacer()
                             .frame(maxWidth: .infinity)
                     }
-                    
+
                     GlassButton(
                         title: currentPage < pages.count - 1 ? "onboard_next" : "onboard_start",
                         action: {
@@ -105,7 +105,7 @@ struct OnboardingScreen: View {
 // MARK: - Onboarding Page View
 struct OnboardingPageView: View {
     let page: OnboardingPage
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Icon container with glass effect
@@ -116,22 +116,22 @@ struct OnboardingPageView: View {
                     .frame(width: 160, height: 160)
             }
             .frame(width: 160, height: 160)
-            
+
             Spacer()
                 .frame(height: 48)
-            
+
             // Title
             Text(page.title)
-                .font(.system(size: 28, weight: .bold))
+                .font(ErgoGuardTypography.headlineLarge)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
-            
+
             Spacer()
                 .frame(height: 16)
-            
+
             // Description
             Text(page.description)
-                .font(.system(size: 17))
+                .font(ErgoGuardTypography.bodyLarge)
                 .foregroundColor(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
                 .lineSpacing(4)

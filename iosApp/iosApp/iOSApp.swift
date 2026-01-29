@@ -4,7 +4,8 @@ import SwiftUI
 struct iOSApp: App {
     var body: some Scene {
         WindowGroup {
-            MainContentView()
+            SplashScreen()
+                .background(ErgoGuardColors.primary.ignoresSafeArea())
         }
     }
 }

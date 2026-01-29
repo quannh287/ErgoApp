@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Liquid Glass Card
 // Premium glassmorphism effect with blur, transparency, and subtle border
@@ -78,11 +79,11 @@ struct GlassButton: View {
     @Environment(\.colorScheme) var colorScheme
     
     private var primaryColor: Color {
-        Color(hex: "006874")
+        colorScheme == .dark ? ErgoGuardColors.Dark.primary : ErgoGuardColors.primary
     }
     
     private var textColor: Color {
-        Color(hex: "001F25")
+        colorScheme == .dark ? ErgoGuardColors.Dark.onPrimary : ErgoGuardColors.onPrimaryContainer
     }
     
     var body: some View {
@@ -93,7 +94,8 @@ struct GlassButton: View {
                         .font(.system(size: 18, weight: .medium))
                 }
                 Text(title)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(ErgoGuardTypography.titleMedium)
+                    .fontWeight(.semibold)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
@@ -121,6 +123,7 @@ struct GlassButton: View {
                         lineWidth: isPrimary ? 0 : 1
                     )
             )
+            .contentShape(Rectangle())
         }
         .buttonStyle(ScaleButtonStyle())
     }
@@ -145,29 +148,28 @@ struct GlassIconButton: View {
     @Environment(\.colorScheme) var colorScheme
     
     private var textColor: Color {
-        Color(hex: "001F25")
+        ErgoGuardColors.onPrimaryContainer
     }
     
     var body: some View {
         Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: size * 0.45, weight: .medium))
-                .foregroundColor(tintColor ?? (colorScheme == .dark ? .white : textColor))
-                .frame(width: size, height: size)
-                .background(
-                    ZStack {
-                        if #available(iOS 15.0, *) {
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                        } else {
-                            Circle()
-                                .fill(Color.white.opacity(0.2))
-                        }
-                        Circle()
-                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                    }
-                )
-                .clipShape(Circle())
+            ZStack {
+                if #available(iOS 15.0, *) {
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                } else {
+                    Circle()
+                        .fill(Color.white.opacity(0.2))
+                }
+                Circle()
+                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                
+                Image(systemName: systemName)
+                    .font(.system(size: size * 0.45, weight: .medium))
+                    .foregroundColor(tintColor ?? (colorScheme == .dark ? .white : textColor))
+            }
+            .frame(width: size, height: size)
+            .contentShape(Circle())
         }
         .buttonStyle(ScaleButtonStyle())
     }
@@ -182,7 +184,8 @@ struct GlassChip: View {
     var body: some View {
         Button(action: action) {
             Text(text)
-                .font(.system(size: 14, weight: isSelected ? .semibold : .regular))
+                .font(ErgoGuardTypography.labelLarge)
+                .fontWeight(isSelected ? .semibold : .regular)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 8)
                 .background(
@@ -201,6 +204,7 @@ struct GlassChip: View {
                     }
                 )
                 .foregroundColor(isSelected ? .black : .white)
+                .contentShape(Capsule())
         }
         .buttonStyle(ScaleButtonStyle())
     }
@@ -215,7 +219,8 @@ struct ViewModeChip: View {
     var body: some View {
         Button(action: action) {
             Text(text)
-                .font(.system(size: 14, weight: isSelected ? .semibold : .regular))
+                .font(ErgoGuardTypography.labelLarge)
+                .fontWeight(isSelected ? .semibold : .regular)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 8)
                 .background(
@@ -223,6 +228,7 @@ struct ViewModeChip: View {
                         .fill(isSelected ? Color.white : Color.white.opacity(0.15))
                 )
                 .foregroundColor(isSelected ? .black : .white)
+                .contentShape(Capsule())
         }
         .buttonStyle(ScaleButtonStyle())
     }
@@ -231,7 +237,7 @@ struct ViewModeChip: View {
 // MARK: - Glass Progress View
 struct GlassProgressView: View {
     var progress: Double
-    var color: Color = Color(hex: "006874")
+    var color: Color = ErgoGuardColors.primary
     var height: CGFloat = 8
     
     var body: some View {
@@ -256,9 +262,9 @@ struct GlassProgressView: View {
 struct AnimatedGradientBackground: View {
     @State private var animateGradient = false
     
-    private var primaryColor: Color { Color(hex: "006874") }
-    private var tertiaryColor: Color { Color(hex: "006C4C") }
-    private var containerColor: Color { Color(hex: "97F0FF") }
+    private var primaryColor: Color { ErgoGuardColors.primary }
+    private var tertiaryColor: Color { ErgoGuardColors.tertiary }
+    private var containerColor: Color { ErgoGuardColors.primaryContainer }
     
     var body: some View {
         LinearGradient(
@@ -278,8 +284,6 @@ struct AnimatedGradientBackground: View {
         }
     }
 }
-
-// Color extension is defined in Extensions.swift
 
 // MARK: - Preview
 #if DEBUG

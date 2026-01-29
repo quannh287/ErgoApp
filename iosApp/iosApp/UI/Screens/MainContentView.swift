@@ -2,8 +2,7 @@ import SwiftUI
 import UIKit
 
 // MARK: - App Navigation State
-enum AppScreen {
-    case onboarding
+enum AppScreen: Hashable {
     case camera
     case result
     case history
@@ -11,90 +10,102 @@ enum AppScreen {
 
 // MARK: - Main Content View
 struct MainContentView: View {
-    @State private var currentScreen: AppScreen = .onboarding
+    @State private var navigationPath = NavigationPath()
     @State private var hasCompletedOnboarding = false
     @State private var capturedImage: UIImage? = nil
     @State private var analysisResult: AnalysisResult? = nil
     @State private var comparisonResult: ComparisonResult? = nil
     @State private var historyEntries: [HistoryEntry] = []
     @State private var isFirstCapture = true
-    
+
+    // Gallery selection state
+    @State private var showImagePicker = false
+    @State private var selectedImage: UIImage? = nil
+
     var body: some View {
-        ZStack {
-            switch currentScreen {
-            case .onboarding:
+        Group {
+            if !hasCompletedOnboarding {
+                // Show onboarding first
                 OnboardingScreen(onComplete: {
                     withAnimation {
                         hasCompletedOnboarding = true
-                        currentScreen = .camera
                     }
                 })
-                .transition(.opacity)
-                
-            case .camera:
-                CameraScreen(
-                    onPhotoCaptured: { image in
-                        capturedImage = image
-                        // Simulate analysis
-                        performAnalysis()
-                    },
-                    onGallerySelect: {
-                        // Open gallery placeholder
-                    },
-                    onHistoryClick: {
-                        withAnimation {
-                            currentScreen = .history
-                        }
-                    }
-                )
-                .transition(.opacity)
-                
-            case .result:
-                if let result = analysisResult {
-                    ResultScreen(
-                        result: result,
-                        comparison: comparisonResult,
-                        isFirstCapture: isFirstCapture,
-                        onRetakeClick: {
-                            withAnimation {
-                                isFirstCapture = false
-                                currentScreen = .camera
-                            }
+            } else {
+                // Navigation stack for main app flow
+                NavigationStack(path: $navigationPath) {
+                    CameraScreen(
+                        onPhotoCaptured: { image in
+                            capturedImage = image
+                            performAnalysis()
                         },
-                        onResetClick: {
-                            withAnimation {
-                                isFirstCapture = true
-                                analysisResult = nil
-                                comparisonResult = nil
-                                currentScreen = .camera
-                            }
+                        onGallerySelect: {
+                            showImagePicker = true
+                        },
+                        onHistoryClick: {
+                            navigationPath.append(AppScreen.history)
                         }
                     )
-                    .transition(.opacity)
-                }
-                
-            case .history:
-                HistoryScreen(
-                    historyEntries: historyEntries,
-                    onBackClick: {
-                        withAnimation {
-                            currentScreen = .camera
+                    .navigationDestination(for: AppScreen.self) { screen in
+                        switch screen {
+                        case .camera:
+                            CameraScreen(
+                                onPhotoCaptured: { image in
+                                    capturedImage = image
+                                    performAnalysis()
+                                },
+                                onGallerySelect: {
+                                    showImagePicker = true
+                                },
+                                onHistoryClick: {
+                                    navigationPath.append(AppScreen.history)
+                                }
+                            )
+
+                        case .result:
+                            if let result = analysisResult {
+                                ResultScreenWrapper(
+                                    result: result,
+                                    comparison: comparisonResult,
+                                    isFirstCapture: isFirstCapture,
+                                    navigationPath: $navigationPath,
+                                    onRetakeClick: {
+                                        isFirstCapture = false
+                                    },
+                                    onResetClick: {
+                                        isFirstCapture = true
+                                        analysisResult = nil
+                                        comparisonResult = nil
+                                    }
+                                )
+                            }
+
+                        case .history:
+                            HistoryScreen(historyEntries: historyEntries)
                         }
                     }
-                )
-                .transition(.opacity)
+                }
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: currentScreen)
+        .sheet(isPresented: $showImagePicker) {
+            ImagePicker(image: $selectedImage)
+        }
+        .onChange(of: selectedImage) { newImage in
+            if let image = newImage {
+                capturedImage = image
+                performAnalysis()
+                selectedImage = nil
+            }
+        }
     }
-    
+
     private func performAnalysis() {
         // Simulate AI analysis delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let percentage = Double.random(in: 10...80)
             let level: SeverityLevel
             let message: String
-            
+
             if percentage < 20 {
                 level = .normal
                 message = NSLocalizedString("analysis_good", comment: "")
@@ -105,20 +116,19 @@ struct MainContentView: View {
                 level = .danger
                 message = NSLocalizedString("analysis_danger", comment: "")
             }
-            
+
             let neckLoad = 5.0 + (percentage * 0.35)
-            
+
             // Calculate comparison
             var comparison: ComparisonResult? = nil
             if let lastEntry = historyEntries.last {
                 let diff = lastEntry.percentage - percentage
-                // Positive diff means improvement (lower percentage is better)
                 let isImproved = diff > 0
                 let absDiff = abs(diff)
-                
+
                 let formatKey = isImproved ? "compare_improved" : "compare_worsened"
                 let msg = String(format: NSLocalizedString(formatKey, comment: ""), Int(absDiff))
-                
+
                 comparison = ComparisonResult(
                     percentageChange: absDiff,
                     isImproved: isImproved,
@@ -126,7 +136,7 @@ struct MainContentView: View {
                 )
             }
             comparisonResult = comparison
-            
+
             analysisResult = AnalysisResult(
                 protrusionPercentage: percentage,
                 level: level,
@@ -134,7 +144,7 @@ struct MainContentView: View {
                 message: message,
                 fixAction: NSLocalizedString("fix_action", comment: "")
             )
-            
+
             // Save to history
             let entry = HistoryEntry(
                 timestamp: Date(),
@@ -143,11 +153,38 @@ struct MainContentView: View {
                 neckLoadKg: neckLoad
             )
             historyEntries.append(entry)
-            
-            withAnimation {
-                currentScreen = .result
+
+            // Navigate to result screen
+            DispatchQueue.main.async {
+                navigationPath.append(AppScreen.result)
             }
         }
+    }
+}
+
+// MARK: - Result Screen Wrapper
+struct ResultScreenWrapper: View {
+    let result: AnalysisResult
+    let comparison: ComparisonResult?
+    let isFirstCapture: Bool
+    @Binding var navigationPath: NavigationPath
+    let onRetakeClick: () -> Void
+    let onResetClick: () -> Void
+
+    var body: some View {
+        ResultScreen(
+            result: result,
+            comparison: comparison,
+            isFirstCapture: isFirstCapture,
+            onRetakeClick: {
+                onRetakeClick()
+                navigationPath.removeLast()
+            },
+            onResetClick: {
+                onResetClick()
+                navigationPath.removeLast(navigationPath.count)
+            }
+        )
     }
 }
 

@@ -16,6 +16,7 @@ junit = "4.13.2"
 kotlin = "2.3.0"
 kotlinx-coroutines = "1.10.2"
 mlkit-pose = "18.0.0-beta5"
+androidx-splashscreen = "1.0.1"
 datastore = "1.1.1"
 kotlinx-serialization = "1.7.3"
 
@@ -40,6 +41,9 @@ camerax-view = { module = "androidx.camera:camera-view", version.ref = "camerax"
 
 # MLKit Pose Detection
 mlkit-pose-detection = { module = "com.google.mlkit:pose-detection", version.ref = "mlkit-pose" }
+
+# Splash Screen
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 # DataStore
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }

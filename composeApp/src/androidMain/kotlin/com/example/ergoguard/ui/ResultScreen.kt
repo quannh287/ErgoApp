@@ -20,6 +20,7 @@ import com.example.ergoguard.R
 import com.example.ergoguard.model.AnalysisResult
 import com.example.ergoguard.model.ComparisonResult
 import com.example.ergoguard.model.SeverityLevel
+import com.example.ergoguard.ui.components.AnimatedGradientBackground
 
 /**
  * Màn hình hiển thị kết quả phân tích tư thế.
@@ -39,7 +40,7 @@ fun ResultScreen(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = backgroundColor.toArgb()
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
         }
     }
@@ -55,158 +56,160 @@ fun ResultScreen(
         SeverityLevel.DANGER -> stringResource(R.string.status_warning_severe)
     }
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Percentage display - Standard Text
+    AnimatedGradientBackground {
+        Scaffold(
+            modifier = modifier.fillMaxSize(),
+            containerColor = Color.Transparent
+        ) { paddingValues ->
             Column(
-                modifier = Modifier.wrapContentSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "${result.protrusionPercentage.toInt()}%",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = levelColor,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = statusText,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = levelColor
-                )
-            }
+                Spacer(modifier = Modifier.height(32.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Neck load - Standard Card with Shadow
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            ) {
+                // Percentage display - Standard Text
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
+                    modifier = Modifier.wrapContentSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.result_neck_load),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = "~${result.neckLoadKg.toInt()} kg",
-                        style = MaterialTheme.typography.displayMedium,
+                        text = "${result.protrusionPercentage.toInt()}%",
+                        style = MaterialTheme.typography.displayLarge,
                         color = levelColor,
                         fontWeight = FontWeight.Bold
                     )
+                    Text(
+                        text = statusText,
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = levelColor
+                    )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // Message
-            Text(
-                text = result.message,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
+                // Neck load - Standard Card with Shadow
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.result_neck_load),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = "~${result.neckLoadKg.toInt()} kg",
+                            style = MaterialTheme.typography.displayMedium,
+                            color = levelColor,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
 
-            // Comparison result (if not first capture)
-            if (comparison != null) {
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // Message
+                Text(
+                    text = result.message,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
+                // Comparison result (if not first capture)
+                if (comparison != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (comparison.isImproved)
+                                MaterialTheme.colorScheme.tertiaryContainer
+                            else
+                                MaterialTheme.colorScheme.errorContainer
+                        )
+                    ) {
+                        Text(
+                            text = comparison.improvementMessage,
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Medium,
+                            color = if (comparison.isImproved)
+                                MaterialTheme.colorScheme.onTertiaryContainer
+                            else
+                                MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Fix Action
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (comparison.isImproved)
-                            MaterialTheme.colorScheme.tertiaryContainer
-                        else
-                            MaterialTheme.colorScheme.errorContainer
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 ) {
-                    Text(
-                        text = comparison.improvementMessage,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Medium,
-                        color = if (comparison.isImproved)
-                            MaterialTheme.colorScheme.onTertiaryContainer
-                        else
-                            MaterialTheme.colorScheme.onErrorContainer
-                    )
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = stringResource(R.string.result_exercise_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = result.fixAction,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.weight(1f))
 
-            // Fix Action
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                )
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = stringResource(R.string.result_exercise_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = result.fixAction,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            // Buttons
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                OutlinedButton(
-                    onClick = onResetClick,
-                    modifier = Modifier.weight(1f)
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text(stringResource(R.string.btn_start_over))
+                    OutlinedButton(
+                        onClick = onResetClick,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(stringResource(R.string.btn_start_over))
+                    }
+
+                    Button(
+                        onClick = onRetakeClick,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            if (isFirstCapture) stringResource(R.string.btn_retake)
+                            else stringResource(R.string.btn_compare)
+                        )
+                    }
                 }
 
-                Button(
-                    onClick = onRetakeClick,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        if (isFirstCapture) stringResource(R.string.btn_retake)
-                        else stringResource(R.string.btn_compare)
-                    )
-                }
+                Spacer(modifier = Modifier.height(16.dp))
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

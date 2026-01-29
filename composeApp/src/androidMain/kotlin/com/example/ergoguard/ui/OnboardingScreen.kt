@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.example.ergoguard.R
+import com.example.ergoguard.ui.components.AnimatedGradientBackground
 import kotlinx.coroutines.launch
 
 data class OnboardingPage(
@@ -35,7 +37,7 @@ data class OnboardingPage(
     val descriptionRes: Int
 )
 
-private val onboardingPages = listOf(
+private val onboardingPagesData = listOf(
     OnboardingPage(
         icon = Icons.Rounded.CameraAlt,
         titleRes = R.string.onboarding_title_1,
@@ -65,112 +67,114 @@ fun OnboardingScreen(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = backgroundColor.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
+            window.statusBarColor = android.graphics.Color.WHITE
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
         }
     }
 
-    val pagerState = rememberPagerState(pageCount = { onboardingPages.size })
+    val pagerState = rememberPagerState(pageCount = { onboardingPagesData.size })
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Pager
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxWidth()
-                ) { page ->
-                    OnboardingPageContent(page = onboardingPages[page])
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Dots indicator
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+    AnimatedGradientBackground {
+        Scaffold(
+            modifier = modifier.fillMaxSize(),
+            containerColor = Color.Transparent
+        ) { paddingValues ->
+            Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    repeat(onboardingPages.size) { index ->
-                        val isSelected = pagerState.currentPage == index
-                        Box(
-                            modifier = Modifier
-                                .size(if (isSelected) 12.dp else 8.dp)
-                                .clip(CircleShape)
-                                .background(
-                                    if (isSelected)
-                                        MaterialTheme.colorScheme.primary
-                                    else
-                                        MaterialTheme.colorScheme.primaryContainer
-                                )
-                        )
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Pager
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxWidth()
+                    ) { page ->
+                        OnboardingPageContent(page = onboardingPagesData[page])
                     }
-                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.weight(1f))
 
-                // Buttons
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    if (pagerState.currentPage > 0) {
-                        OutlinedButton(
+                    // Dots indicator
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        repeat(onboardingPagesData.size) { index ->
+                            val isSelected = pagerState.currentPage == index
+                            Box(
+                                modifier = Modifier
+                                    .size(if (isSelected) 12.dp else 8.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        if (isSelected)
+                                            MaterialTheme.colorScheme.primary
+                                        else
+                                            MaterialTheme.colorScheme.primaryContainer
+                                    )
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Buttons
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        if (pagerState.currentPage > 0) {
+                            OutlinedButton(
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                    }
+                                },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(stringResource(R.string.btn_back))
+                            }
+                        } else {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+
+                        Button(
                             onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                if (pagerState.currentPage < onboardingPagesData.size - 1) {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    }
+                                } else {
+                                    onComplete()
                                 }
                             },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text(stringResource(R.string.btn_back))
+                            Text(
+                                if (pagerState.currentPage < onboardingPagesData.size - 1)
+                                    stringResource(R.string.btn_continue)
+                                else
+                                    stringResource(R.string.btn_start)
+                            )
                         }
-                    } else {
-                        Spacer(modifier = Modifier.weight(1f))
                     }
 
-                    Button(
-                        onClick = {
-                            if (pagerState.currentPage < onboardingPages.size - 1) {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                                }
-                            } else {
-                                onComplete()
-                            }
-                        },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            if (pagerState.currentPage < onboardingPages.size - 1)
-                                stringResource(R.string.btn_continue)
-                            else
-                                stringResource(R.string.btn_start)
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-
-            // Skip button
-            TextButton(
-                onClick = onComplete,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-            ) {
-                Text(stringResource(R.string.btn_skip))
+                // Skip button
+                TextButton(
+                    onClick = onComplete,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                ) {
+                    Text(stringResource(R.string.btn_skip))
+                }
             }
         }
     }
@@ -234,7 +238,7 @@ private fun OnboardingPageContent(page: OnboardingPage) {
 @Composable
 private fun OnboardingScreenPreviewStep1() {
     com.example.ergoguard.ui.theme.ErgoGuardTheme {
-        OnboardingPageContent(page = onboardingPages[0])
+        OnboardingPageContent(page = onboardingPagesData[0])
     }
 }
 
@@ -243,7 +247,7 @@ private fun OnboardingScreenPreviewStep1() {
 @Composable
 private fun OnboardingScreenPreviewStep2() {
     com.example.ergoguard.ui.theme.ErgoGuardTheme {
-        OnboardingPageContent(page = onboardingPages[1])
+        OnboardingPageContent(page = onboardingPagesData[1])
     }
 }
 
@@ -252,6 +256,6 @@ private fun OnboardingScreenPreviewStep2() {
 @Composable
 private fun OnboardingScreenPreviewStep3() {
     com.example.ergoguard.ui.theme.ErgoGuardTheme {
-        OnboardingPageContent(page = onboardingPages[2])
+        OnboardingPageContent(page = onboardingPagesData[2])
     }
 }

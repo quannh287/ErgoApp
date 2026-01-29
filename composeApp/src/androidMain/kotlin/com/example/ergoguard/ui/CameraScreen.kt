@@ -8,12 +8,12 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,6 +51,8 @@ import androidx.core.view.WindowCompat
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.zIndex
 import com.example.ergoguard.R
 
 /**
@@ -385,25 +387,29 @@ fun CameraScreen(
                 }
 
                 // Timer Group
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    AnimatedVisibility(
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(52.dp)) {
+                    // Timer picker popup
+                    this@Column.AnimatedVisibility(
                         visible = showTimerPicker,
-                        enter = fadeIn() + expandHorizontally(expandFrom = Alignment.End),
-                        exit = fadeOut() + shrinkHorizontally(shrinkTowards = Alignment.End)
+                        enter = fadeIn() + scaleIn(transformOrigin = TransformOrigin(0.5f, 1f)) + expandVertically(expandFrom = Alignment.Bottom),
+                        exit = fadeOut() + scaleOut(transformOrigin = TransformOrigin(0.5f, 1f)) + shrinkVertically(shrinkTowards = Alignment.Bottom),
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .offset(y = (-60).dp)
+                            .zIndex(1f)
                     ) {
                         Card(
-                            modifier = Modifier.padding(end = 12.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = Color.Black.copy(alpha = 0.6f)
                             ),
                             shape = RoundedCornerShape(24.dp)
                         ) {
-                            Row(
+                            Column(
                                 modifier = Modifier.padding(4.dp),
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 listOf(0, 3, 5, 10).forEach { s ->
-                                    TimerOption(s, selectedTimer) { selectedTimer = it }
+                                    TimerOption(s, selectedTimer) { selectedTimer = it; showTimerPicker = false }
                                 }
                             }
                         }
@@ -416,7 +422,7 @@ fun CameraScreen(
                             containerColor = if (selectedTimer > 0) Color.White else Color.White.copy(alpha = 0.2f),
                             contentColor = if (selectedTimer > 0) Color.Black else Color.White
                         ),
-                        modifier = Modifier.size(52.dp)
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         if (selectedTimer > 0) {
                             Text("${selectedTimer}s", fontWeight = FontWeight.Bold, fontSize = 14.sp)

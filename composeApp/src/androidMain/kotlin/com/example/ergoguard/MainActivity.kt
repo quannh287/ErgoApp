@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,15 +32,34 @@ import com.example.ergoguard.ui.theme.ErgoGuardTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
         setContent {
+            val viewModel: PostureViewModel = viewModel()
+            val context = LocalContext.current
+            val prefsRepository = remember { AppPreferencesRepository(context) }
+            var hasSeenOnboarding by remember { mutableStateOf<Boolean?>(null) }
+
+            // Keep splash screen until onboarding preference is loaded
+            splashScreen.setKeepOnScreenCondition {
+                hasSeenOnboarding == null
+            }
+
+            LaunchedEffect(Unit) {
+                viewModel.initPoseDetector(context)
+                hasSeenOnboarding = prefsRepository.hasSeenOnboarding.first()
+            }
+
             ErgoGuardTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ErgoGuardApp()
+                    if (hasSeenOnboarding != null) {
+                        ErgoGuardApp(viewModel, hasSeenOnboarding!!)
+                    }
                 }
             }
         }
@@ -87,37 +107,26 @@ private fun historyToJson(entries: List<HistoryEntry>): String {
 
 @Composable
 fun ErgoGuardApp(
-    viewModel: PostureViewModel = viewModel()
+    viewModel: PostureViewModel,
+    initialHasSeenOnboarding: Boolean
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
     val prefsRepository = remember { AppPreferencesRepository(context) }
-    var hasSeenOnboarding by remember { mutableStateOf<Boolean?>(null) }
+    var hasSeenOnboarding by remember { mutableStateOf(initialHasSeenOnboarding) }
     var currentScreen by remember { mutableStateOf(Screen.CAMERA) }
     var historyEntries by remember { mutableStateOf<List<HistoryEntry>>(emptyList()) }
 
-    // Load preferences
+    // Load history
     LaunchedEffect(Unit) {
-        viewModel.initPoseDetector(context)
-        hasSeenOnboarding = prefsRepository.hasSeenOnboarding.first()
-
-        // Load history
         val historyJson = prefsRepository.historyJson.first()
         historyEntries = parseHistoryJson(historyJson)
     }
 
-    // Wait for preferences to load
-    if (hasSeenOnboarding == null) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-        return
-    }
-
     // Show onboarding if not seen
-    if (hasSeenOnboarding == false) {
+    if (!hasSeenOnboarding) {
         OnboardingScreen(
             onComplete = {
                 scope.launch {
